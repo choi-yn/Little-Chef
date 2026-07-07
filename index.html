@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>꼬마 요리사의 식탁</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <p class="game-description">음식을 누르면 설명이 나와요.</p>
+    </header>
+
+    <section class="food-tray" id="foodTray" aria-label="음식 선택"></section>
+
+    <section class="table-section" aria-label="식탁">
+      <div class="dining-table">
+        <div class="table-top">
+          <div class="drop-zones">
+            <div class="drop-zone" data-slot="0"></div>
+            <div class="drop-zone" data-slot="1"></div>
+            <div class="drop-zone" data-slot="2"></div>
+            <div class="drop-zone" data-slot="3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <button class="restart-btn" id="restartBtn" type="button" hidden aria-label="다시 하기">
+      <svg class="restart-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M49 18.5C44.2 13.2 37.2 10 29.5 10 17.4 10 7.5 19.9 7.5 32S17.4 54 29.5 54c10.8 0 20-7.2 22.8-17.2" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+        <path d="M49 10v12h-12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="restart-label">다시 하기</span>
+    </button>
+  </div>
+
+  <div class="drag-ghost" id="dragGhost" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
