@@ -38,6 +38,7 @@
   let usedFoodIds = new Set();
   let completionPlayed = false;
   const DRAG_THRESHOLD = 20;
+  const TOP_ROW_INDICES = new Set([0, 1, 2, 3, 4, 5, 7]);
 
   function clearDropZoneDragState() {
     dropZones.forEach(function (z) {
@@ -224,30 +225,50 @@
     dragGhost.classList.remove('visible', 'is-curry', 'is-small-food');
   }
 
+  function createFoodItem(food) {
+    const el = document.createElement('div');
+    el.className = 'food-item';
+    el.dataset.foodId = food.id;
+    el.dataset.image = food.image;
+    el.dataset.audio = food.audio;
+
+    const img = document.createElement('img');
+    img.src = 'image/' + food.image;
+    img.alt = food.id;
+    img.draggable = false;
+    el.appendChild(img);
+
+    el.addEventListener('pointerdown', onDragStart);
+    return el;
+  }
+
   function renderFoodTray() {
     foodTray.innerHTML = '';
 
-    ALL_FOODS.forEach(function (food) {
+    const row1 = document.createElement('div');
+    row1.className = 'food-tray-row';
+    const row2 = document.createElement('div');
+    row2.className = 'food-tray-row';
+
+    ALL_FOODS.forEach(function (food, index) {
       if (isFoodUsed(food.id)) {
         return;
       }
 
-      const el = document.createElement('div');
-      el.className = 'food-item';
-      el.dataset.foodId = food.id;
-      el.dataset.image = food.image;
-      el.dataset.audio = food.audio;
-
-      const img = document.createElement('img');
-      img.src = 'image/' + food.image;
-      img.alt = food.id;
-      img.draggable = false;
-      el.appendChild(img);
-
-      el.addEventListener('pointerdown', onDragStart);
-
-      foodTray.appendChild(el);
+      const el = createFoodItem(food);
+      if (TOP_ROW_INDICES.has(index)) {
+        row1.appendChild(el);
+      } else {
+        row2.appendChild(el);
+      }
     });
+
+    if (row1.childElementCount) {
+      foodTray.appendChild(row1);
+    }
+    if (row2.childElementCount) {
+      foodTray.appendChild(row2);
+    }
   }
 
   function onDragStart(e) {
@@ -379,10 +400,7 @@
     zone.classList.add('filled');
     tableSlots[slotIndex] = { image: image, foodId: foodId };
     usedFoodIds.add(foodId);
-
-    if (sourceEl && sourceEl.parentNode) {
-      sourceEl.remove();
-    }
+    renderFoodTray();
 
     if (getFilledCount() < 4) {
       playPlacementSound();
